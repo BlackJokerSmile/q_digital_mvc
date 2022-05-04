@@ -1,0 +1,50 @@
+.task-header {
+    text-align: center;
+    padding: 1em 0;
+}
+
+.form {
+    display: flex;
+    flex-grow: row nowrap;
+}
+
+.form input[type='text']    {
+    flex-grow: 1    ;
+    width: 100%;
+}
+
+.tasks-list > * {
+    padding: inherit;
+    border: inherit;
+}
+
+.task {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.task__main {
+    flex-grow: 1;
+}
+
+.task__status {
+    height: 32px;
+    width: 32px;
+    align-self: flex-start;
+    border: 0.25em solid gray;
+    border-radius: 50%;
+    content: "";
+    flex-shrink: 0
+}
+
+.task__status_ready {
+    border-color: green;
+    box-shadow: 0 0 0.5em green, inset 0 0 0.5em green;
+}
+
+.task__status_not-ready {
+    border-color: tomato;
+    box-shadow: 0 0 0.5em tomato, inset 0 0 0.5em tomato;
+}
