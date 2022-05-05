@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS `versions` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS users(
+    `id` INT AUTO_INCREMENT,
+    `login` VARCHAR(128) NOT NULL,
+    `password` VARCHAR(128) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT UNIQUE `uq_users_login` (`login`)
+);
+
+CREATE TABLE IF NOT EXISTS tasks(
+    `id` INT AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `description` VARCHAR(256) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `status` VARCHAR(16) NOT NULL,
+    PRIMARY KEY (`id`)
+);

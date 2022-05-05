@@ -1,0 +1,9 @@
+[DATABASE]
+HOST = '127.0.0.1'
+DB_USER = 'database_user'
+DB_PASSWORD = 'password'
+DB_NAME = 'database'
+DB_TABLE_VERSIONS = 'versions'
+
+[MIGRATIONS]
+MIGRATIONS_DIR = 'migrations'
