@@ -1,4 +1,6 @@
 <?php
-    function getUrl() {
+    namespace Util;
+
+    function get_url() {
         return strtok($_SERVER["REQUEST_URI"], '?');
-    };
+    }

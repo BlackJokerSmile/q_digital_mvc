@@ -1,0 +1,6 @@
+[DATABASE]
+DRIVER = 'mysql'
+HOST = '127.0.0.1'
+DB_USER = 'task'
+DB_PASSWORD = 'task'
+DB_NAME = 'tasklist'

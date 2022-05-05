@@ -6,13 +6,25 @@
             self::init();
             self::autoload();
 
-            self::$current_controller = Router::get_current_controller();
+            self::run_controller_action();
         }
 
         private static function init(): void {
             define('DS', DIRECTORY_SEPARATOR);
 
             define('ROOT', getcwd() . DS);
+
+            define('UTILS_PATH', ROOT . 'utils' . DS);
+
+            // include all util files
+            require_once UTILS_PATH . 'utils.php';
+
+            \Util\register_session();
+
+            define('SESSION_USER', $_SESSION['session_user']);
+            define('SESSION_USER_ID', $_SESSION['session_user_id']);
+            
+            define('CONFIG_PATH', ROOT . 'config' . DS);
 
             define('CORE_PATH', ROOT . 'core' . DS);
             define('CONTROLLERS_PATH', ROOT . 'controllers' . DS);
@@ -22,18 +34,16 @@
             define('TEMPLATES_PATH', ROOT . 'templates' . DS);
             define('LAYOUT_PATH', TEMPLATES_PATH . 'layout.php');
 
-            define('UTILS_PATH', ROOT . 'utils' . DS);
+            define('URI', \Util\get_url());
 
-            require_once UTILS_PATH . 'getUrl.php';
+            $splitted_url = \Util\split_url();
 
-            define('URI', getUrl());
+            define('CONTROLLER', $splitted_url[0]);
+            define('ACTION', $splitted_url[1]);
+            define('ARGUMENTS', $splitted_url[2]);
 
-            require_once CORE_PATH . 'Router.class.php';
             require_once CORE_PATH . 'Controller.class.php';
-
-            require_once ROOT . 'routes.php';
-
-            session_start();
+            require_once CORE_PATH . 'Model.class.php';
         }
 
         private static function autoload(): void {
@@ -43,13 +53,34 @@
         private static function load(string $classname): void {
             // Autoload app’s controller and model classes
         
-            if (substr($classname, -10) == 'Controller'){
+            if (substr($classname, -10) == 'Controller') {
                 // Controller
-                require_once CONTROLLERS_PATH . $classname . '.class.php';
-            } elseif (substr($classname, -5) == 'Model'){
+                $path = CONTROLLERS_PATH . $classname . '.class.php';
+            } elseif (substr($classname, -5) == 'Model') {
                 // Model
-                require_once MODELS_PATH . $classname . '.class.php';
+                $path =  MODELS_PATH . $classname . '.class.php';
             }
         
+            if (file_exists($path)) {
+                include_once $path;
+            }
+        }
+
+        private static function run_controller_action(): void {
+            if (CONTROLLER === '') {
+                $controller_name = 'IndexController';
+            } else {
+                $controller_name = ucfirst(strtolower(CONTROLLER)) . "Controller";
+            }
+
+            if (class_exists($controller_name)) {
+                $controller = new $controller_name();
+            } else {
+                $controller = new \Controller();
+            }    
+
+            $action_name = ACTION ?? 'main';
+
+            $controller->$action_name();
         }
     }
