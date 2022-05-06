@@ -1,7 +1,6 @@
 <?php
     class App {
-        public static $current_controller;
-
+        
         public static function run() {
             self::init();
             self::autoload();
