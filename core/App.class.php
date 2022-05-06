@@ -1,6 +1,7 @@
 <?php
     class App {
-        
+        public static $pdo;
+
         public static function run() {
             self::init();
             self::autoload();
@@ -43,6 +44,35 @@
 
             require_once CORE_PATH . 'Controller.class.php';
             require_once CORE_PATH . 'Model.class.php';
+
+            self::$pdo = self::get_PDO();
+        }
+
+        private static function get_PDO(): \PDO {
+            $cfg = parse_ini_file(CONFIG_PATH . 'pdo.cfg');
+
+            if (!$cfg) {
+                return new Exception('Cannot read given config file for database connection');
+            }
+
+            $dsn = sprintf(
+                '%s:host=%s;dbname=%s',
+                $cfg['DRIVER'],
+                $cfg['HOST'],
+                $cfg['DB_NAME']
+            );
+
+            $conn = new \PDO(
+                $dsn,
+                $cfg['DB_USER'],
+                $cfg['DB_PASSWORD']
+            );
+
+            if (!$conn) {
+                return new \Exception('Cannot connect to database with given settings');
+            }
+
+            return $conn;
         }
 
         private static function autoload(): void {
